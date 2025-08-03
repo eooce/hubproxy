@@ -24,11 +24,11 @@ if [ ! -f "./$FILE_NAME" ]; then
     chmod +x "./$FILE_NAME"
 fi
 
-# 启动 webssh
+# 启动 HubProxy
 echo -e "\e[1;34mStarting HubProxy...\e[0m"
 
 # 判断启动参数组合
-nohup "./$FILE_NAME" >/dev/null 2>&1 &
+nohup ./$FILE_NAME >/dev/null 2>&1 &
 
 sleep 3
 

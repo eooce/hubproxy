@@ -20,6 +20,7 @@ FILE_URL="${BASE_URL}/hubproxy-linux-${ARCH}"
 if [ ! -f "./$FILE_NAME" ]; then
     echo -e "\e[1;32mDownloading $FILE_NAME for $ARCH architecture...\e[0m"
     curl -L -sS -o "./$FILE_NAME" "$FILE_URL" || { echo -e "\e[1;31mFailed to download $FILE_URL\e[0m"; exit 1; }
+    curl -L -sS -o config.toml https://github.com/eooce/hubproxy/releases/download/HubProxy/config.toml
     chmod +x "./$FILE_NAME"
 fi
 

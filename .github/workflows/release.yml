@@ -70,9 +70,6 @@ jobs:
           
           # 复制systemd服务文件
           cp hubproxy.service build/
-          
-          # 复制安装脚本
-          cp install.sh build/
          
           # 创建README文件
           cat > build/README.md << 'EOF'

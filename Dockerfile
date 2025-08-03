@@ -1,17 +1,13 @@
-FROM golang:1.24-alpine AS builder
+FROM alpine:3.20
 
 WORKDIR /app
-COPY src/go.mod src/go.sum ./
-RUN go mod download
 
-COPY src/ .
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -trimpath -o hubproxy .
+COPY . .
 
-FROM alpine
+EXPOSE 5000/tcp
 
-WORKDIR /root/
+RUN apk update && apk upgrade && \
+    apk add --no-cache curl bash && \
+    chmod +x start.sh
 
-COPY --from=builder /app/hubproxy .
-COPY --from=builder /app/config.toml .
-
-CMD ["./hubproxy"]
+CMD ["sh", "-c", "./start.sh & tail -f /dev/null"]

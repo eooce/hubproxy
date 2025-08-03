@@ -25,13 +25,6 @@ jobs:
         with:
           go-version: '1.24'
           
-      - name: 获取版本号
-        id: version
-        run: |
-          VERSION=${{ github.event.inputs.version }}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "版本号: $VERSION"
-          
       - name: 生成变更日志
         id: changelog
         run: |
@@ -58,10 +51,10 @@ jobs:
           cd src
           
           # Linux AMD64
-          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../build/hubproxy-${{ steps.version.outputs.version }}-linux-amd64 .
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../build/hubproxy-linux-amd64 .
           
           # Linux ARM64
-          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../build/hubproxy-${{ steps.version.outputs.version }}-linux-arm64 .
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../build/hubproxy-linux-arm64 .
           
       - name: 复制配置文件
         run: |
@@ -81,29 +74,28 @@ jobs:
       - name: 计算文件校验和
         run: |
           cd build
-          sha256sum hubproxy-${{ steps.version.outputs.version }}-linux-* > checksums.txt
+          sha256sum hubproxy-linux-* > checksums.txt
           cat checksums.txt
           
       - name: 创建或更新Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          name: "HubProxy ${{ steps.version.outputs.version }}"
+          tag_name: HubProxy  # 固定标签名
+          name: "HubProxy"    # Release名称
           body: |
             ${{ steps.changelog.outputs.changelog }}
             
             
             ## 下载文件
             
-            - **Linux AMD64**: `hubproxy-${{ steps.version.outputs.version }}-linux-amd64`
-            - **Linux ARM64**: `hubproxy-${{ steps.version.outputs.version }}-linux-arm64`
+            - **Linux AMD64**: `hubproxy-linux-amd64`
+            - **Linux ARM64**: `hubproxy-linux-arm64`
             
           files: |
-            build/hubproxy-${{ steps.version.outputs.version }}-linux-amd64
-            build/hubproxy-${{ steps.version.outputs.version }}-linux-arm64
+            build/hubproxy-linux-amd64
+            build/hubproxy-linux-arm64
             build/config.toml
             build/hubproxy.service
-            build/install.sh
             build/README.md
             build/checksums.txt
           draft: false

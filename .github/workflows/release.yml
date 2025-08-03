@@ -78,7 +78,7 @@ jobs:
           cat > build/README.md << 'EOF'
           # HubProxy
           
-          项目地址：https://github.com/sky22333/hubproxy
+          项目地址：https://github.com/eooce/hubproxy
           EOF
           
       - name: 计算文件校验和
